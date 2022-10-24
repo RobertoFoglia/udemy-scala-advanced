@@ -1,8 +1,9 @@
 package lectures.part1as
 
 import scala.annotation.tailrec
+import scala.util.Try
 
-
+/** ### Recao: the scala basics ############### */
 
 object Recap extends App {
 
