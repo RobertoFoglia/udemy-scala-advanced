@@ -2,7 +2,7 @@ package lectures.part1as
 
 import scala.util.Try
 
-
+// ## Dark syntax sugar ####################
 object DarkSugars extends App {
 
   // syntax sugar #1: methods with single param
@@ -74,7 +74,8 @@ object DarkSugars extends App {
 
   // syntax sugar #5: infix types
   class Composite[A, B]
-  val composite: Int Composite String = ???
+  val normalComposite: Composite[Int, String] = ???
+  val compositeWithSugarSyntax: Int Composite String = ???
 
   class -->[A, B]
   val towards: Int --> String = ???
