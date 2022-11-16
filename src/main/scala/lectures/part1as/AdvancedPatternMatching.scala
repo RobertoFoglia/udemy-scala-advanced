@@ -1,12 +1,18 @@
 package lectures.part1as
 
-
+// ## Advanced pattern matching ####################
 object AdvancedPatternMatching extends App {
 
-  val numbers = List(1)
-  val description = numbers match {
-    case head :: Nil => println(s"the only element is $head.")
+  var numbers = List(1)
+  var description = numbers match {
+    case head :: Nil => println(s"the only element is $head.")    // print only there are a only item in the list
     case _ =>
+  }
+
+  numbers = List(1,2,3)
+  description = numbers match {
+    case head :: Nil => println(s"the only element is $head.") // print only there are a only item in the list
+    case _ => println("there are more items")
   }
 
   /*
@@ -24,6 +30,7 @@ object AdvancedPatternMatching extends App {
       if (person.age < 21) None
       else Some((person.name, person.age))
 
+    // more unapply methods
     def unapply(age: Int): Option[String] =
       Some(if (age < 21) "minor" else "major")
   }
@@ -35,6 +42,8 @@ object AdvancedPatternMatching extends App {
 
   println(greeting)
 
+
+  // unapply(age: Int)
   val legalStatus = bob.age match {
     case Person(status) => s"My legal status is $status"
   }
@@ -45,6 +54,13 @@ object AdvancedPatternMatching extends App {
     Exercise.
    */
 
+  val nE: Int = 45
+  val mathPropertyE = nE match
+    case x if x < 10 => "single digit"
+    case x if x % 2 == 0 => "an even number"
+    case _ => "no property"
+
+// Solution
   object even {
     def unapply(arg: Int): Boolean = arg % 2 == 0
   }
@@ -61,6 +77,11 @@ object AdvancedPatternMatching extends App {
   }
 
   println(mathProperty)
+
+  /* ------------------------------------------------------------ */
+
+
+  // ## Advanced pattern matching part2 ####################
 
   // infix patterns
   case class Or[A, B](a: A, b: B)
