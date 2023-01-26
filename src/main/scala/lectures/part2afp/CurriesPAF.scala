@@ -3,6 +3,8 @@ package lectures.part2afp
 
 object CurriesPAF extends App {
 
+  // ## Currying and Partially Applied Functions #############################
+
   // curried functions
   val superAdder: Int => Int => Int =
     x => y => x + y
@@ -19,6 +21,7 @@ object CurriesPAF extends App {
 
   // functions != methods (JVM limitation)
   def inc(x: Int) = x + 1
+  List(1,2,3).map(inc) // compile transforms in
   List(1,2,3).map(x => inc(x))  // ETA-expansion
 
   // Partial function applications
@@ -36,7 +39,7 @@ object CurriesPAF extends App {
   val add7_2 = simpleAddFunction.curried(7)
   val add7_6 = simpleAddFunction(7, _: Int) // works as well
 
-  val add7_3 = curriedAddMethod(7) _  // PAF
+  val add7_3 = curriedAddMethod(7) _  // PAF partial function
   val add7_4 = curriedAddMethod(7)(_) // PAF = alternative syntax
 
   val add7_5 = simpleAddMethod(7, _: Int) // alternative syntax for turning methods into function values
@@ -62,6 +65,8 @@ object CurriesPAF extends App {
   val seriousFormat = curriedFormatter("%8.6f") _
   val preciseFormat = curriedFormatter("%14.12f") _
 
+  // more readable
+  println(numbers.map(preciseFormat)) // equivalent to
   println(numbers.map(curriedFormatter("%14.12f"))) // compiler does sweet eta-expansion for us
 
   /*
