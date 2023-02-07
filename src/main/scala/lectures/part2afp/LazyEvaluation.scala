@@ -1,6 +1,8 @@
 package lectures.part2afp
 
 
+// ## Lazy Evaluation #########
+
 object LazyEvaluation extends App {
 
   // lazy DELAYS the evaluation of values
@@ -23,9 +25,13 @@ object LazyEvaluation extends App {
   println(if (simpleCondition && lazyCondition) "yes" else "no")
 
   // in conjunction with call by name
+  def byNameMethodOld(n: => Int): Int = {
+    n + n + n + 1   // the user have to wait three seconds
+  }
+
   def byNameMethod(n: => Int): Int = {
     // CALL BY NEED
-    lazy val t = n // only evaluated once
+    lazy val t = n // only evaluated once and the user have to wait one second
     t + t + t + 1
   }
   def retrieveMagicValue = {
@@ -73,6 +79,7 @@ object LazyEvaluation extends App {
     naturals.foreach(println) // will crash - infinite!
     naturals.map(_ * 2) // stream of all even numbers (potentially infinite)
    */
+
   abstract class MyStream[+A] {
     def isEmpty: Boolean
     def head: A
