@@ -2,8 +2,14 @@ package exercises
 
 import scala.annotation.tailrec
 
+/*
+  Exercise: implement a lazily evaluated, singly linked STREAM of elements.
 
-
+  naturals = MyStream.from(1)(x => x + 1) = stream of natural numbers (potentially infinite!)
+  naturals.take(100).foreach(println) // lazily evaluated stream of the first 100 naturals (finite stream)
+  naturals.foreach(println) // will crash - infinite!
+  naturals.map(_ * 2) // stream of all even numbers (potentially infinite)
+ */
 
 abstract class MyStream[+A] {
   def isEmpty: Boolean
@@ -50,16 +56,19 @@ object EmptyStream extends MyStream[Nothing] {
   def take(n: Int): MyStream[Nothing] = this
 }
 
-class Cons[+A](hd: A, tl: => MyStream[A]) extends MyStream[A] {
+class Cons[+A](hd: A,
+               tl: => MyStream[A]     // important for implementation CALL-BY-NAME
+              ) extends MyStream[A] {
   def isEmpty: Boolean = false
 
-  override val head: A = hd
+  override val head: A = hd     // definition overriding
   override lazy val tail: MyStream[A] = tl  // call by need
   /*
     val s = new Cons(1, EmptyStream)
     val prepended = 1 #:: s = new Cons(1, s)
    */
   def #::[B >: A](element: B): MyStream[B] = new Cons(element, this)
+  // before the implementation had a by-value parameter with eager evaluation
   def ++[B >: A](anotherStream: => MyStream[B]): MyStream[B] = new Cons(head, tail ++ anotherStream)
 
   def foreach(f: A => Unit): Unit = {
@@ -73,6 +82,7 @@ class Cons[+A](hd: A, tl: => MyStream[A]) extends MyStream[A] {
       ... mapped.tail
    */
   def map[B](f: A => B): MyStream[B] = new Cons(f(head), tail.map(f)) // preserves lazy evaluation
+  // call-by-name to avoid the eager evaluation that can lead to a stackoverflow exception
   def flatMap[B](f: A => MyStream[B]): MyStream[B] = f(head) ++ tail.flatMap(f)
   def filter(predicate: A => Boolean): MyStream[A] =
     if (predicate(head)) new Cons(head, tail.filter(predicate))
